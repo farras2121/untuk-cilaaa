@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Bello Cilaaaaa 🍌</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght=400;600;700;800;900&display=swap" rel="stylesheet"/>
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'Nunito',sans-serif;background:#1a1a2e;color:#fff;overflow-x:hidden}
+
+/* ===== BRUTAL EXTRA ANIMATIONS CODE ===== */
+@keyframes brutalShake {
+  0%, 100% { transform: translate(0, 0) rotate(0deg); }
+  10% { transform: translate(-4px, 3px) rotate(-1deg); }
+  30% { transform: translate(5px, -2px) rotate(1deg); }
+  50% { transform: translate(-3px, -3px) rotate(-1deg); }
+  70% { transform: translate(4px, 4px) rotate(1deg); }
+  90% { transform: translate(-2px, 2px) rotate(0deg); }
+}
+@keyframes brutalFlash {
+  0% { background: #fff; opacity: 1; }
+  100% { background: transparent; opacity: 0; }
+}
+.screen-shake { animation: brutalShake 0.4s cubic-bezier(.36,.07,.19,.97) both; }
+.flash-effect { position: fixed; inset: 0; z-index: 9999; pointer-events: none; mix-blend-mode: overlay; animation: brutalFlash 0.5s ease-out forwards; }
+
+/* ===== FLOATING PARTICLES ===== */
+.particles-bg{position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:0}
+.particle{position:absolute;font-size:28px;opacity:0;animation:particleDrift var(--dur,8s) ease-in-out var(--delay,0s) infinite}
+@keyframes particleDrift{
+  0%{opacity:0;transform:translateY(100%) rotate(0deg) scale(0.5)}
+  10%{opacity:0.35}
+  90%{opacity:0.35}
+  100%{opacity:0;transform:translateY(-120%) rotate(360deg) scale(1.1)}
+}
+
+/* ===== COVER ===== */
+#cover{min-height:100vh;background:linear-gradient(135deg,#FFE135 0%,#FFD700 40%,#FFC200 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;overflow:hidden;cursor:pointer;padding:20px}
+#cover::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 30% 70%,rgba(255,255,255,0.2) 0%,transparent 60%);z-index:0}
+.cover-content{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;width:100%;max-width:400px}
+.cover-minion{width:160px;height:200px;margin-bottom:24px;animation:bounce 2s ease-in-out infinite}
+.minion-body{width:160px;height:200px;background:linear-gradient(180deg,#FFD700 0%,#FFE135 100%);border-radius:80px 80px 60px 60px;border:6px solid #4a3728;position:relative;overflow:hidden}
+.minion-outfit{position:absolute;bottom:0;left:0;right:0;height:80px;background:#5b7fce;border-top:6px solid #4a3728}
+.minion-outfit::after{content:'';position:absolute;bottom:10px;left:50%;transform:translateX(-50%);width:30px;height:6px;background:#4a3728;border-radius:3px}
+.minion-goggle-frame{position:absolute;top:60px;left:50%;transform:translateX(-50%);width:80px;height:36px;background:#9b8562;border-radius:18px;border:5px solid #4a3728;display:flex;align-items:center;justify-content:center;gap:4px}
+.minion-eye{width:28px;height:28px;background:#fff;border-radius:50%;border:3px solid #4a3728;display:flex;align-items:center;justify-content:center}
+.minion-pupil{width:12px;height:12px;background:#4a3728;border-radius:50%;transition:transform 0.1s}
+.minion-mouth{position:absolute;bottom:65px;left:50%;transform:translateX(-50%);width:50px;height:20px;border:5px solid #4a3728;border-top:none;border-radius:0 0 25px 25px;background:#fff;overflow:hidden}
+.minion-teeth{display:flex;gap:2px;padding:2px 4px}
+.minion-tooth{width:10px;height:12px;background:#fff;border:2px solid #e0d0b0;border-radius:2px}
+.minion-hair{position:absolute;top:-12px;left:50%;transform:translateX(-50%);display:flex;gap:8px}
+.minion-strand{width:8px;height:24px;background:#4a3728;border-radius:4px 4px 0 0;transform:rotate(-5deg)}
+.minion-strand:nth-child(2){transform:rotate(5deg)}
+.cover-title{font-family:'Fredoka One',cursive;font-size:clamp(36px, 6vw, 52px);color:#1a3a6e;text-shadow:3px 3px 0px rgba(0,0,0,0.12);margin-bottom:8px;text-align:center}
+.cover-sub{font-size:14px;color:#4a3728;font-weight:700;letter-spacing:3px;text-transform:uppercase;opacity:0.8;margin-bottom:40px;text-align:center}
+.open-btn{background:#1a3a6e;color:#FFE135;font-family:'Fredoka One',cursive;font-size:22px;padding:18px 50px;border:none;border-radius:50px;cursor:pointer;transition:all 0.3s;box-shadow:0 8px 25px rgba(26,58,110,0.4);letter-spacing:1px;width:100%;max-width:280px}
+.open-btn:hover{transform:translateY(-4px);box-shadow:0 14px 35px rgba(26,58,110,0.5);background:#0e2458}
+
+/* ===== MAIN ===== */
+#main{display:none}
+
+/* ===== SECTION BASE ===== */
+section{position:relative;overflow:hidden;width:100%}
+section>.particles-bg{z-index:0}
+.section-inner{position:relative;z-index:1;width:100%;max-width:1200px;margin:0 auto;padding:0 20px;display:flex;flex-direction:column;align-items:center}
+
+/* ===== HERO ===== */
+.section-hero{min-height:100vh;background:#FFE135;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 0}
+.badge-pill{background:#1a3a6e;color:#FFE135;font-family:'Fredoka One',cursive;font-size:13px;padding:8px 24px;border-radius:30px;letter-spacing:3px;text-transform:uppercase;margin-bottom:30px;animation:pulse 2s infinite;position:relative;z-index:1}
+.section-hero h1{font-family:'Fredoka One',cursive;font-size:clamp(42px,8vw,80px);color:#1a3a6e;text-align:center;line-height:1.1;margin-bottom:16px;position:relative;z-index:1}
+.section-hero h1 em{color:#4a3728;font-style:italic}
+.section-hero p{color:#4a3728;font-size: clamp(15px, 2vw, 18px);font-weight:600;text-align:center;max-width:500px;line-height:1.7;margin-bottom:40px;position:relative;z-index:1}
+.scroll-hint{color:#1a3a6e;font-size:14px;font-weight:800;letter-spacing:2px;text-transform:uppercase;opacity:0.6;animation:bounce2 2s infinite;position:relative;z-index:1}
+
+/* ===== PHOTO SECTION ===== */
+.section-photo{padding:80px 0;background:#1a1a2e}
+.photo-frame{width:100%;max-width:400px;border-radius:24px;overflow:hidden;border:5px solid #FFE135;box-shadow:0 20px 60px rgba(0,0,0,0.5);position:relative;cursor:pointer;transform:rotate(-2deg);transition:all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);z-index:1}
+.photo-frame:hover{transform:rotate(3deg) scale(1.08);box-shadow: 0 30px 70px rgba(255,225,53,0.3);}
+.photo-frame img{width:100%;height:340px;object-fit:cover;display:block}
+.photo-frame .photo-tag{position:absolute;bottom:16px;left:16px;background:rgba(255,225,53,0.95);color:#1a3a6e;font-family:'Fredoka One',cursive;font-size:16px;padding:6px 18px;border-radius:20px}
+.section-photo .label{color:#FFE135;font-family:'Fredoka One',cursive;font-size:12px;letter-spacing:4px;text-transform:uppercase;margin-bottom:20px;opacity:0.7;position:relative;z-index:1}
+.section-photo h2{font-family:'Fredoka One',cursive;font-size:clamp(28px, 4vw, 40px);text-align:center;margin-bottom:40px;color:#fff;position:relative;z-index:1;line-height:1.3}
+.section-photo h2 em{color:#FFE135}
+
+/* ===== REASONS (ORIGINAL GRID) ===== */
+.section-reasons{padding:80px 0;background:#FFD700}
+.section-reasons .label{color:#1a3a6e;font-family:'Fredoka One',cursive;font-size:12px;letter-spacing:4px;text-transform:uppercase;margin-bottom:16px;opacity:0.7;position:relative;z-index:1}
+.section-reasons h2{font-family:'Fredoka One',cursive;font-size:clamp(28px, 4vw, 40px);text-align:center;margin-bottom:50px;color:#1a3a6e;position:relative;z-index:1}
+.reasons-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px;max-width:900px;width:100%;position:relative;z-index:1}
+.reason-card{background:#fff;border-radius:20px;padding:28px;border:4px solid #1a3a6e;position:relative;overflow:hidden;transition:all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)}
+.reason-card:hover{transform:translateY(-12px) scale(1.04);box-shadow:0 20px 40px rgba(26,58,110,0.25);border-color:#ff6b9d;}
+.reason-card::before{content:'';position:absolute;top:0;right:0;width:80px;height:80px;background:#FFE135;border-radius:0 0 0 100%;opacity:0.5}
+.reason-icon{font-size:36px;margin-bottom:12px;transition:transform 0.3s}
+.reason-card:hover .reason-icon{transform:scale(1.3) rotate(15deg);}
+.reason-card h3{font-family:'Fredoka One',cursive;font-size:22px;color:#1a3a6e;margin-bottom:8px}
+.reason-card p{color:#4a3728;font-size:15px;font-weight:600;line-height:1.6}
+
+/* ===== GALLERY (ORIGINAL GRID) ===== */
+.section-gallery{padding:80px 0;background:#0f0f23}
+.section-gallery .label{color:#FFE135;font-family:'Fredoka One',cursive;font-size:12px;letter-spacing:4px;text-transform:uppercase;margin-bottom:16px;opacity:0.7;position:relative;z-index:1}
+.section-gallery h2{font-family:'Fredoka One',cursive;font-size:clamp(28px, 4vw, 40px);text-align:center;margin-bottom:50px;color:#fff;position:relative;z-index:1}
+.section-gallery h2 em{color:#FFE135}
+.gallery-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;max-width:600px;width:100%;position:relative;z-index:1}
+.gallery-item{border-radius:16px;overflow:hidden;border:3px solid #FFE135;position:relative;cursor:pointer;transition:all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)}
+.gallery-item:hover{transform:scale(1.06) rotate(-1deg);box-shadow:0 15px 35px rgba(255,225,53,0.25)}
+.gallery-item img{width:100%;height:180px;object-fit:cover;display:block}
+.gallery-item .gallery-label{position:absolute;bottom:10px;right:10px;background:rgba(26,58,110,0.9);color:#FFE135;font-family:'Fredoka One',cursive;font-size:18px;padding:4px 14px;border-radius:14px}
+.gallery-item:first-child{grid-column:1/-1}
+.gallery-item:first-child img{height:240px}
+
+/* ===== FACTS / LETTER ===== */
+.section-facts{padding:80px 0;background:#1a3a6e}
+.section-facts .label{color:#FFE135;font-family:'Fredoka One',cursive;font-size:12px;letter-spacing:4px;text-transform:uppercase;margin-bottom:16px;opacity:0.7;position:relative;z-index:1}
+.section-facts h2{font-family:'Fredoka One',cursive;font-size:clamp(28px, 4vw, 40px);text-align:center;margin-bottom:50px;color:#FFE135;position:relative;z-index:1}
+.facts-list{max-width:600px;width:100%;display:flex;flex-direction:column;gap:16px;position:relative;z-index:1}
+.fact-item{background:rgba(255,225,53,0.1);border:2px solid rgba(255,225,53,0.3);border-radius:16px;padding:20px 24px;display:flex;align-items:flex-start;gap:16px;transition:all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);cursor:pointer}
+.fact-item:hover{background:rgba(255,225,53,0.25);transform:translateX(15px) scale(1.02);border-color:#FFE135;box-shadow:0 10px 25px rgba(255,225,53,0.15)}
+.fact-num{font-family:'Fredoka One',cursive;font-size:32px;color:#FFE135;min-width:44px;line-height:1;transition:transform 0.3s}
+.fact-item:hover .fact-num { transform: scale(1.2) rotate(-10deg); }
+.fact-text h4{font-family:'Fredoka One',cursive;font-size:20px;color:#FFE135;margin-bottom:4px}
+.fact-text p{color:rgba(255,255,255,0.8);font-size:14px;font-weight:600;line-height:1.6}
+
+/* ===== FINAL ===== */
+.section-final{min-height:100vh;background:#FFE135;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:80px 0;text-align:center}
+.section-final .badge-pill{position:relative;z-index:1}
+.section-final h1{font-family:'Fredoka One',cursive;font-size:clamp(34px,7vw,72px);color:#1a3a6e;line-height:1.1;margin:24px 0 16px;position:relative;z-index:1}
+.section-final p{color:#4a3728;font-size:16px;font-weight:700;max-width:480px;line-height:1.7;position:relative;z-index:1}
+.heart-confetti-btn{background:#1a3a6e;color:#FFE135;font-family:'Fredoka One',cursive;font-size:24px;padding:20px 50px;border:none;border-radius:50px;cursor:pointer;margin-top:40px;transition:all 0.3s;box-shadow:0 10px 30px rgba(26,58,110,0.35);position:relative;z-index:1;width:100%;max-width:320px}
+.heart-confetti-btn:hover{transform:translateY(-4px) scale(1.05);box-shadow:0 16px 40px rgba(26,58,110,0.45)}
+.final-footer{margin-top:60px;color:#4a3728;font-size:13px;font-weight:700;letter-spacing:2px;opacity:0.6;text-transform:uppercase;position:relative;z-index:1}
+
+/* ===== ANIMATIONS ===== */
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-16px)}}
+@keyframes bounce2{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.6}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(40px)}to{opacity:1;transform:translateY(0)}}
+.fade-up{opacity:0;animation:fadeUp 0.8s ease forwards}
+.delay-1{animation-delay:0.15s}.delay-2{animation-delay:0.3s}.delay-3{animation-delay:0.45s}
+
+/* ===== WAVING PARALLAX BG SHAPES ===== */
+.wave-blob{position:absolute;border-radius:50%;filter:blur(60px);opacity:0.18;pointer-events:none;z-index:0}
+</style>
+</head>
+<body>
+
+<!-- COVER -->
+<div id="cover">
+  <div class="particles-bg" id="cover-particles"></div>
+  <div class="cover-content">
+    <div class="cover-minion">
+      <div class="minion-body">
+        <div class="minion-hair"><div class="minion-strand"></div><div class="minion-strand"></div><div class="minion-strand"></div></div>
+        <div class="minion-goggle-frame">
+          <div class="minion-eye"><div class="minion-pupil" id="pupil-l"></div></div>
+          <div class="minion-eye"><div class="minion-pupil" id="pupil-r"></div></div>
+        </div>
+        <div class="minion-mouth"><div class="minion-teeth"><div class="minion-tooth"></div><div class="minion-tooth"></div><div class="minion-tooth"></div></div></div>
+        <div class="minion-outfit"></div>
+      </div>
+    </div>
+    <div class="cover-title">Bello, Cila! 🍌</div>
+    <div class="cover-sub">✨ tap to open your letter ✨</div>
+    <button class="open-btn" onclick="openLetter()">OPEN MESSAGE 💛</button>
+  </div>
+</div>
+
+<!-- MAIN CONTENT -->
+<div id="main">
+
+  <!-- HERO -->
+  <section class="section-hero">
+    <div class="section-inner">
+      <div class="particles-bg" id="hero-particles"></div>
+      <div class="wave-blob" style="width:400px;height:400px;background:#FFD700;top:-100px;right:-100px;animation:blobMove1 7s ease-in-out infinite"></div>
+      <div class="wave-blob" style="width:300px;height:300px;background:#FFA500;bottom:-80px;left:-80px;animation:blobMove2 9s ease-in-out infinite"></div>
+      <div class="badge-pill fade-up">Tulaliloo ti amo! 💛</div>
+      <h1 class="fade-up delay-1">For You,<br><em>My</em><br>Everything</h1>
+      <p class="fade-up delay-2">Di antara jutaan momen yang lewat setiap hari, momen bareng kamu selalu jadi yang paling aku tunggu-tunggu.</p>
+      <div class="scroll-hint fade-up delay-3">scroll ke bawah ↓</div>
+    </div>
+  </section>
+
+  <!-- PHOTO -->
+  <section class="section-photo">
+    <div class="section-inner">
+      <div class="particles-bg" id="photo-particles"></div>
+      <div class="wave-blob" style="width:350px;height:350px;background:#FFE135;top:50px;left:-120px;animation:blobMove2 8s ease-in-out infinite"></div>
+      <div class="wave-blob" style="width:250px;height:250px;background:#5b7fce;bottom:50px;right:-80px;animation:blobMove1 10s ease-in-out infinite"></div>
+      <div class="label">captured in time ✨</div>
+      <h2>Kamu bikin segalanya<br><em>jadi lebih indah</em></h2>
+      <div class="photo-frame" onclick="heartRain()">
+        <img src="/foto1.jpg" alt="Foto Bersama" onerror="this.src='https://images.unsplash.com/photo-1522512115668-c09775d6f424?w=600&q=80'"/>
+        <div class="photo-tag">📸 tap for love ❤️</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- REASONS (ORIGINAL UNTOUCHED LAYOUT) -->
+  <section class="section-reasons">
+    <div class="section-inner">
+      <div class="particles-bg" id="reasons-particles"></div>
+      <div class="wave-blob" style="width:500px;height:500px;background:#FFE135;top:-150px;right:-150px;animation:blobMove1 11s ease-in-out infinite"></div>
+      <div class="label">kenapa kamu spesial</div>
+      <h2>Alasan Aku Suka Kamu 🍌</h2>
+      <div class="reasons-grid">
+        <div class="reason-card"><div class="reason-icon">😄</div><h3>Senyum Kamu</h3><p>Satu senyuman dari kamu bisa bikin seluruh hari jadi lebih cerah dari matahari manapun.</p></div>
+        <div class="reason-card"><div class="reason-icon">✨</div><h3>Auramu</h3><p>Genuine, hangat, dan lebih bersinar dari glitter emas. Kamu beda dari semua orang.</p></div>
+        <div class="reason-card"><div class="reason-icon">🤣</div><h3>Cara Kamu Ketawa</h3><p>Suara ketawa kamu itu soundtrack favorit aku. Bisa diputar seharian dan nggak pernah bosen.</p></div>
+        <div class="reason-card"><div class="reason-icon">🌟</div><h3>Kamu yang Asli</h3><p>Nggak perlu jadi siapa-siapa. Versi asli kamu itu udah more than enough — lebih dari cukup.</p></div>
+        <div class="reason-card"><div class="reason-icon">💪</div><h3>Kekuatan Kamu</h3><p>Kamu kuat banget, bahkan di saat-saat yang paling susah. Dan aku kagum sama itu setiap hari.</p></div>
+        <div class="reason-card"><div class="reason-icon">🍌</div><h3>Simply You</h3><p>Setiap versi kamu, di setiap momen — selalu bikin aku bersyukur banget kamu ada.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- GALLERY (ORIGINAL UNTOUCHED LAYOUT) -->
+  <section class="section-gallery">
+    <div class="section-inner">
+      <div class="particles-bg" id="gallery-particles"></div>
+      <div class="wave-blob" style="width:300px;height:300px;background:#1a3a6e;top:80px;right:-60px;animation:blobMove2 9s ease-in-out infinite"></div>
+      <div class="wave-blob" style="width:400px;height:400px;background:#FFE135;bottom:-100px;left:-100px;animation:blobMove1 12s ease-in-out infinite;opacity:0.08"></div>
+      <div class="label">captured moments 📸</div>
+      <h2>Foto Kita, <em>Kenangan Kita</em></h2>
+      <div class="gallery-grid">
+        <div class="gallery-item" onclick="heartRain()">
+          <img src="/foto2.jpg" alt="Memory 1" onerror="this.src='https://images.unsplash.com/photo-1601662528567-526cd06f6582?w=600&q=80'"/>
+          <div class="gallery-label">us 💛</div>
+        </div>
+        <div class="gallery-item" onclick="heartRain()">
+          <img src="/foto3.jpg" alt="Memory 2" onerror="this.src='https://images.unsplash.com/photo-1534447677768-be436bb09401?w=400&q=80'"/>
+          <div class="gallery-label">🍌</div>
+        </div>
+        <div class="gallery-item" onclick="heartRain()">
+          <img src="/foto4.jpg" alt="Memory 3" onerror="this.src='https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=400&q=80'"/>
+          <div class="gallery-label">always ✨</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- LETTER -->
+  <section class="section-facts">
+    <div class="section-inner">
+      <div class="particles-bg" id="facts-particles"></div>
+      <div class="wave-blob" style="width:350px;height:350px;background:#FFE135;top:-80px;left:-80px;animation:blobMove1 8s ease-in-out infinite;opacity:0.12"></div>
+      <div class="wave-blob" style="width:280px;height:280px;background:#5b7fce;bottom:-60px;right:-60px;animation:blobMove2 10s ease-in-out infinite;opacity:0.15"></div>
+      <div class="label">from my heart 💌</div>
+      <h2>Surat Kecil Buat Kamu</h2>
+      <div class="facts-list">
+        <div class="fact-item"><div class="fact-num">01</div><div class="fact-text"><h4>Makasih udah ada</h4><p>Nggak semua orang bisa bikin dunia terasa lebih baik cuma dengan kehadirannya. Tapi kamu bisa.</p></div></div>
+        <div class="fact-item"><div class="fact-num">02</div><div class="fact-text"><h4>Kamu itu jarang banget</h4><p>Orang sebaik, sehangat, dan seotentik kamu itu langka. Aku nggak mau pernah anggap itu biasa.</p></div></div>
+        <div class="fact-item"><div class="fact-num">03</div><div class="fact-text"><h4>Hari-hari lebih berwarna</h4><p>Sejak ada kamu, bahkan hari yang paling monoton pun terasa punya warna baru. Warna kuning minionmu.</p></div></div>
+        <div class="fact-item"><div class="fact-num">04</div><div class="fact-text"><h4>I'm lucky to know you</h4><p>Di antara semua hal yang terjadi di hidup ini, knowing you adalah salah satu yang terbaik.</p></div></div>
+        <div class="fact-item"><div class="fact-num">05</div><div class="fact-text"><h4>To the moon and back 🚀</h4><p>Kalau Minion bisa terbang ke bulan buat ngambil pisang, aku mau terbang ke bulan buat kamu. Always.</p></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FINAL -->
+  <section class="section-final">
+    <div class="section-inner">
+      <div class="particles-bg" id="final-particles"></div>
+      <div class="wave-blob" style="width:450px;height:450px;background:#FFD700;top:-100px;right:-120px;animation:blobMove2 9s ease-in-out infinite"></div>
+      <div class="wave-blob" style="width:350px;height:350px;background:#FFA500;bottom:-80px;left:-80px;animation:blobMove1 7s ease-in-out infinite"></div>
+      <div class="badge-pill">always & forever 🍌</div>
+      <h1>Kamu Layak Dicintai<br><em style="color:#4a3728">Tanpa Batas</em></h1>
+      <p>Kemana pun hidup membawa kita, selalu ada satu hal yang nggak berubah — kamu spesial, dan kamu layak dapat semua hal terbaik di dunia ini. 💛</p>
+      <button class="heart-confetti-btn" onclick="bigCelebration()">Poopaye! 🍌💛</button>
+    </div>
+  </section>
+
+</div>
+
+<style>
+@keyframes blobMove1{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(30px,-20px) scale(1.08)}66%{transform:translate(-20px,15px) scale(0.95)}}
+@keyframes blobMove2{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(-25px,20px) scale(1.05)}66%{transform:translate(20px,-15px) scale(0.97)}}
+</style>
+
+<script>
+/* ===== PARTICLE CONFIG PER SECTION ===== */
+const particleConfigs = {
+  'cover-particles':   { emojis:['🍌','🍌','🍌','✨','⭐'], count:18, light:true },
+  'hero-particles':    { emojis:['🍌','💛','✨','🌟','⭐'], count:16, light:true },
+  'photo-particles':   { emojis:['💛','✨','🌟','💫','⭐'], count:14, light:false },
+  'reasons-particles': { emojis:['🍌','💛','⭐','✨'],      count:16, light:true },
+  'gallery-particles': { emojis:['🍌','💛','✨','💫'],      count:14, light:false },
+  'facts-particles':   { emojis:['💛','✨','🌟','💌','⭐'], count:14, light:false },
+  'final-particles':   { emojis:['🍌','💛','✨','🌟','💫'], count:20, light:true }
+};
+
+function buildParticles(containerId, cfg) {
+  const el = document.getElementById(containerId);
+  if (!el) return;
+  for (let i = 0; i < cfg.count; i++) {
+    const p = document.createElement('span');
+    p.className = 'particle';
+    p.textContent = cfg.emojis[Math.floor(Math.random() * cfg.emojis.length)];
+    const size = 16 + Math.random() * 24;
+    const left = Math.random() * 100;
+    const dur  = 6 + Math.random() * 10;
+    const delay = -(Math.random() * dur);
+    p.style.cssText = `left:${left}%;font-size:${size}px;--dur:${dur}s;--delay:${delay}s`;
+    el.appendChild(p);
+  }
+}
+
+Object.entries(particleConfigs).forEach(([id, cfg]) => buildParticles(id, cfg));
+
+/* ===== EYE FOLLOW MOUSE ===== */
+document.addEventListener('mousemove', e => {
+  ['pupil-l','pupil-r'].forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    const rect = el.closest('.minion-eye').getBoundingClientRect();
+    const cx = rect.left + rect.width / 2;
+    const cy = rect.top + rect.height / 2;
+    const angle = Math.atan2(e.clientY - cy, e.clientX - cx);
+    const dist = 4;
+    el.style.transform = `translate(${Math.cos(angle)*dist}px,${Math.sin(angle)*dist}px)`;
+  });
+});
+
+/* ===== OPEN LETTER (BRUTAL) ===== */
+function openLetter() {
+  const flash = document.createElement('div');
+  flash.className = 'flash-effect';
+  document.body.appendChild(flash);
+  document.body.classList.add('screen-shake');
+  setTimeout(() => document.body.classList.remove('screen-shake'), 400);
+
+  let rilisConfetti = 0;
+  const intervalBuka = setInterval(() => {
+    confetti({particleCount:70,spread:80,origin:{x:Math.random(),y:Math.random()*0.4+0.5},colors:['#FFE135','#FFD700','#1a3a6e','#fff']});
+    rilisConfetti++;
+    if(rilisConfetti > 4) clearInterval(intervalBuka);
+  }, 150);
+
+  confetti({particleCount:200,spread:90,origin:{y:0.6},colors:['#FFE135','#FFD700','#1a3a6e','#fff','#FFA500']});
+  document.getElementById('cover').style.display = 'none';
+  document.getElementById('main').style.display   = 'block';
+}
+
+/* ===== HEART RAIN (BRUTAL) ===== */
+function heartRain() {
+  const end = Date.now() + 3500;
+  (function frame() {
+    confetti({particleCount:5,angle:60, spread:65,origin:{x:0, y:0.7},colors:['#FFE135','#FF6B9D','#fff','#FFD700']});
+    confetti({particleCount:5,angle:120,spread:65,origin:{x:1, y:0.7},colors:['#FFE135','#FF6B9D','#fff','#FFD700']});
+    confetti({particleCount:2,angle:90,spread:30,origin:{x:0.5, y:0.8},colors:['#FF6B9D','#fff']});
+    if (Date.now() < end) requestAnimationFrame(frame);
+  })();
+}
+
+/* ===== BIG CELEBRATION (BRUTAL) ===== */
+function bigCelebration() {
+  const colors = ['#FFE135','#FFD700','#1a3a6e','#FF6B9D','#FFA500','#fff'];
+  for (let i = 0; i < 25; i++) {
+    setTimeout(() => {
+      confetti({
+        particleCount:60,
+        spread:90,
+        origin:{x:Math.random(),y:Math.random()*0.7},
+        colors,
+        startVelocity:Math.random()*20+25,
+        gravity:Math.random()*0.4+0.6
+      });
+    }, i * 120);
+  }
+}
+
+/* ===== SCROLL REVEAL ===== */
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.querySelectorAll('.reason-card,.fact-item,.gallery-item').forEach((el, i) => {
+        el.style.animation = `fadeUp 0.6s ease ${i * 0.12}s both`;
+      });
+    }
+  });
+}, {threshold: 0.15});
+document.querySelectorAll('.section-reasons,.section-facts,.section-gallery').forEach(s => observer.observe(s));
+</script>
+</body>
+</html>
